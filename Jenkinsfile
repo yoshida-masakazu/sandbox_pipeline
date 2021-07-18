@@ -26,5 +26,11 @@ pipeline {
                 """
             }
         }
+        stage('Hello4') {
+            steps {
+                echo 'Hello World4'
+                echo 'My first Jenkinsfile'
+            }
+        }
     }
 }
