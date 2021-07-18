@@ -1,0 +1,26 @@
+githubとjenkinsの連携をしようと思ったが、うまくいかなかった。
+
+理由
+githubから送られてくるwebhookを受けるには、インターネット経由で接続できるアドレスである必要がある
+要するにlocalhostだとだめらしい
+
+TODO:
+virtualboxにjenkinsを立てて検証する
+
+トラブルシューティング
+1. dockerを使用したjobで下記のようなエラーが出た場合
+```
+Invalid agent type "docker" specified. Must be one of [any, label, none] 
+```
+dockerプラグインとdocker pipelineプラグインがインストールされていない
+ダッシュボード > Jenkinsの管理 > プラグインの管理 > 利用可能 から 
+docker・docker pipelineにチェックを入れて、[Download now and install after restart]をクリック
+インストール完了後、jenkinsを再起動
+
+2. dockerを使用したjobで下記のようなエラーが出た場合
+```
+Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json": dial unix /var/run/docker.sock: connect: permission denied
+```
+jenkinsユーザーではマウントしたdocker.sockにアクセスできないため
+ファイルの所有者などを変更すればいいらしいが、うまくいかないため
+jenkinsを実行するユーザーをrootにする (docker-compose.ymlの5行目のように)
